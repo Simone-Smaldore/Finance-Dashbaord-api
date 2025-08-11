@@ -24,4 +24,4 @@ def health_check() -> Response:
     """
     print("Test health check")
     logger.info("Health check endpoint called")
-    return jsonify({"status": "Server up", "test_return": os.getenv("DB_Host")}), 200
+    return jsonify({"status": "Server up"}), 200
