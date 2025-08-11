@@ -21,5 +21,6 @@ def health_check() -> Response:
     Returns:
         Response: Risponde con 200 se il server è in piedi.
     """
+    print("Test health check")
     logger.info("Health check endpoint called")
     return jsonify({"status": "Server up"}), 200
