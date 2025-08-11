@@ -1,1 +1,1 @@
-web: gunicorn --timeout 6000 --bind 0.0.0.0:5000 finance_dashboard_api.app_gunicorn:app
+web: gunicorn --timeout 6000 --bind 0.0.0.0:$PORT finance_dashboard_api.app_gunicorn:app
