@@ -3,6 +3,7 @@
 import logging
 from flask import Blueprint, Response, jsonify
 from flask_cors import CORS
+import os
 
 main_blueprint = Blueprint("main_blueprint", __name__)
 CORS(main_blueprint)
@@ -23,4 +24,4 @@ def health_check() -> Response:
     """
     print("Test health check")
     logger.info("Health check endpoint called")
-    return jsonify({"status": "Server up"}), 200
+    return jsonify({"status": "Server up", "test_return": os.getenv("DB_Host")}), 200
