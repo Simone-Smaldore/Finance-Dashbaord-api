@@ -23,7 +23,7 @@ from finance_dashboard_api.services.configuration_service import ConfigurationSe
 
 import os
 
-print(os.getenv("DB_Host"))
+# print(os.getenv("DB_Host"))
 
 
 logger = logging.getLogger("lhub_backend")
