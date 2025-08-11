@@ -7,6 +7,7 @@ name = "pypi"
 flask = "*"
 flask-cors = "*"
 flask-injector = "*"
+python-dotenv = "*"
 
 [dev-packages]
 

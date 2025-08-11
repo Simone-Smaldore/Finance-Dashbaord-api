@@ -2,3 +2,4 @@
 logs/
 **/__pycache__
 configurations/app-config.json
+.env

@@ -16,6 +16,11 @@ from finance_dashboard_api.logging_module.logger_initalizer import setup_logging
 from finance_dashboard_api.controller.routes import main_blueprint
 from finance_dashboard_api.services.configuration_service import ConfigurationService
 
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+
 logger = logging.getLogger("finance_dashboard_api")
 
 
