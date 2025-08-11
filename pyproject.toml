@@ -15,8 +15,7 @@ dependencies = [
 # Enables the usage of setuptools_scm (DECOMMENTARE IN UNA REPO GIT) 
 # [tool.setuptools_scm]
 [tool.setuptools_scm]
-version_scheme = "guess-next-dev"
-local_scheme = "dirty-tag"
+fallback_version = "0.1.0"
 
 
 # DIPENDENZE DA AGGIUNGERE PER OGNI PASSO DELLA PIPELINE
