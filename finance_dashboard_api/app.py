@@ -53,7 +53,7 @@ def main() -> None:
         app,
         supports_credentials=True,
         origins=[
-            "http://localhost:3000",
+            "http://localhost:5173",
             "https://black-rock-0b9c0dd10.1.azurestaticapps.net/",
         ],
     )

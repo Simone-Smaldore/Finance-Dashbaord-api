@@ -17,7 +17,14 @@ from finance_dashboard_api.services.dao.dao_utente_service import DAOUtenteServi
 from finance_dashboard_api.services.database_service import DatabaseService
 
 api_utente_blueprint = Blueprint("api_utente_blueprint", __name__)
-CORS(api_utente_blueprint)
+CORS(
+    api_utente_blueprint,
+    supports_credentials=True,
+    origins=[
+        "http://localhost:5173",
+        "https://black-rock-0b9c0dd10.1.azurestaticapps.net/",
+    ],
+)
 
 logger = logging.getLogger(__name__)
 db_service = DatabaseService()
@@ -43,8 +50,9 @@ def login(api_utenti_service: APIUtentiService):
         )
     )
     response = jsonify(message)
-    set_access_cookies(response, access_token)
-    response.set_cookie("csrf_access_token", get_csrf_token(access_token))
+    if access_token is not None:
+        set_access_cookies(response, access_token)
+        response.set_cookie("csrf_access_token", get_csrf_token(access_token))
     return response, code
 
 
