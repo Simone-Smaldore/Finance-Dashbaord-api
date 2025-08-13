@@ -1,7 +1,7 @@
-from datetime import datetime
 import logging
-from flask import Blueprint, Flask, request, jsonify
+from flask import Blueprint, request, jsonify
 from flask_cors import CORS
+from flask_jwt_extended import jwt_required
 from injector import inject
 
 from finance_dashboard_api.services.api.api_transazioni_uscite_service import (
@@ -26,6 +26,7 @@ db_service = DatabaseService()
 
 @inject
 @api_transazioni_uscite_blueprint.route("/transazioni_uscite", methods=["GET"])
+@jwt_required()
 def get_transazioni(
     db_service: DatabaseService,
     api_transazioni_uscite_service: APITransazioniUsciteService,
@@ -40,6 +41,7 @@ def get_transazioni(
 
 @inject
 @api_transazioni_uscite_blueprint.route("/transazioni_uscite", methods=["POST"])
+@jwt_required()
 def create_transazione(
     db_service: DatabaseService,
     api_transazioni_uscite_service: APITransazioniUsciteService,

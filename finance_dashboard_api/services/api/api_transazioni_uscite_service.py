@@ -1,3 +1,4 @@
+from flask_jwt_extended import get_jwt_identity
 from finance_dashboard_api.model.dto.dto_transazioni_uscite import DTOTransazioniUscite
 from finance_dashboard_api.services.dao.dao_transazioni_uscite_service import (
     DAOTransazioniService,
@@ -12,7 +13,9 @@ class APITransazioniUsciteService:
         self,
         dao_transazioni_service: DAOTransazioniService,
     ) -> list[DTOTransazioniUscite]:
-        transazioni = dao_transazioni_service.get_all()
+        transazioni = dao_transazioni_service.get_by_utente_id(
+            utente_id=get_jwt_identity()
+        )
         return [
             DTOTransazioniUscite(
                 id=t.id,
@@ -32,10 +35,10 @@ class APITransazioniUsciteService:
         dao_transazioni_service: DAOTransazioniService,
     ) -> Tuple[Union[DTOTransazioniUscite, dict], int]:
         # Controllo dei campi richiesti
-        if not all(k in data for k in ("id_utente", "id_conto", "transazione")):
+        if not all(k in data for k in ("id_conto", "transazione")):
             return {"error": "Missing required fields"}, 400
 
-        id_utente = data["id_utente"]
+        id_utente = get_jwt_identity()
         id_conto = data["id_conto"]
         t_data = data["transazione"]
 

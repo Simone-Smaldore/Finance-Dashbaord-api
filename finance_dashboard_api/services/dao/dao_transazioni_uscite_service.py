@@ -13,6 +13,9 @@ class DAOTransazioniService:
     def get_by_id(self, transazione_id: int):
         return self.db.query(TransazioniUscite).filter_by(id=transazione_id).first()
 
+    def get_by_utente_id(self, utente_id: int):
+        return self.db.query(TransazioniUscite).filter_by(id_utente=utente_id).all()
+
     def create(
         self,
         descrizione: str,

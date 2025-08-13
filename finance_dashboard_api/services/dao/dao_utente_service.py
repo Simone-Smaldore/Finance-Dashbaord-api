@@ -13,6 +13,13 @@ class DAOUtenteService:
     def get_by_id(self, utente_id: int):
         return self.db.query(Utente).filter_by(id=utente_id).first()
 
+    def get_by_username_and_password(self, username: str, password: str):
+        return (
+            self.db.query(Utente)
+            .filter_by(username=username, password=password)
+            .first()
+        )
+
     def create(
         self, username: str, password: str, nome: str = None, cognome: str = None
     ):

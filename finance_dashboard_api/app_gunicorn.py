@@ -13,6 +13,7 @@ from pathlib import Path
 from flask import Flask
 from flask_cors import CORS
 from flask_injector import FlaskInjector, singleton
+from flask_jwt_extended import JWTManager
 from injector import Binder
 
 from finance_dashboard_api.const import CONFIGURATION_FOLDER
@@ -32,8 +33,13 @@ from finance_dashboard_api.services.database_service import DatabaseService
 from finance_dashboard_api.api.model.routes_transazioni_uscite import (
     api_transazioni_uscite_blueprint,
 )
+from finance_dashboard_api.api.model.routes_utente import (
+    api_utente_blueprint,
+)
+from datetime import timedelta
+import os
 
-logger = logging.getLogger("lhub_backend")
+logger = logging.getLogger("finance_dashboard_backend")
 
 
 def configure_injection(binder: Binder) -> None:
@@ -53,9 +59,24 @@ def configure_injection(binder: Binder) -> None:
 
 # Commentato setup loggin perchè non viene trovato correttamente il file. Se serve specificare path assoluto
 app = Flask(__name__)
-CORS(app)
+CORS(
+    app,
+    supports_credentials=True,
+    origins=[
+        "http://localhost:3000",
+        "https://black-rock-0b9c0dd10.1.azurestaticapps.net/",
+    ],
+)
+app.config["JWT_SECRET_KEY"] = os.getenv("SECRET_KEY_JWT")
+app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(weeks=1)
+app.config["JWT_TOKEN_LOCATION"] = ["cookies"]
+app.config["JWT_COOKIE_HTTPONLY"] = True
+app.config["JWT_COOKIE_SECURE"] = True  # In produzione solo HTTPS!
+app.config["JWT_COOKIE_SAMESITE"] = "None"  # Necessario per cross-site
 app.register_blueprint(main_blueprint, url_prefix="")
 app.register_blueprint(api_transazioni_uscite_blueprint, url_prefix="")
+app.register_blueprint(api_utente_blueprint, url_prefix="")
+jwt = JWTManager(app)
 register_errors(app)
 logger.debug("Starting application")
 FlaskInjector(app=app, modules=[configure_injection])
