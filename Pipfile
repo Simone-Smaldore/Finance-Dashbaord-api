@@ -8,6 +8,10 @@ flask = "*"
 flask-cors = "*"
 flask-injector = "*"
 python-dotenv = "*"
+psycopg = "*"
+sqlalchemy = "*"
+pytest = "*"
+psycopg2 = "*"
 
 [dev-packages]
 
