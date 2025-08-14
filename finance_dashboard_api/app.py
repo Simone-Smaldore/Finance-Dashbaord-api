@@ -61,7 +61,7 @@ def main() -> None:
     app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(weeks=1)
     app.config["JWT_TOKEN_LOCATION"] = ["cookies"]
     app.config["JWT_COOKIE_HTTPONLY"] = True
-    app.config["JWT_COOKIE_SECURE"] = False  # In produzione solo HTTPS!
+    app.config["JWT_COOKIE_SECURE"] = True  # In produzione solo HTTPS!
     app.config["JWT_COOKIE_SAMESITE"] = "None"  # Necessario per cross-site
     app.register_blueprint(main_blueprint, url_prefix="")
     app.register_blueprint(api_transazioni_uscite_blueprint, url_prefix="")
