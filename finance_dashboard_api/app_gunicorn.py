@@ -62,9 +62,7 @@ app = Flask(__name__)
 CORS(
     app,
     supports_credentials=True,
-    origins=[
-        "https://black-rock-0b9c0dd10.1.azurestaticapps.net/",
-    ],
+    origins=[os.getenv("FE_URL")],
 )
 app.config["JWT_SECRET_KEY"] = os.getenv("SECRET_KEY_JWT")
 app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(weeks=1)

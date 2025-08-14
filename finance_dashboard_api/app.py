@@ -3,6 +3,9 @@
 Contiene lo startup dell'applicazione.
 """
 
+from dotenv import load_dotenv
+
+load_dotenv()
 import logging
 from pathlib import Path
 
@@ -23,7 +26,7 @@ from finance_dashboard_api.services.api.api_transazioni_uscite_service import (
 )
 from finance_dashboard_api.services.configuration_service import ConfigurationService
 
-from dotenv import load_dotenv
+
 import os
 
 from finance_dashboard_api.services.dao.dao_conto_service import DAOContoService
@@ -53,8 +56,7 @@ def main() -> None:
         app,
         supports_credentials=True,
         origins=[
-            "http://localhost:5173",
-            "https://black-rock-0b9c0dd10.1.azurestaticapps.net/",
+            os.getenv("FE_URL"),
         ],
     )
     app.config["JWT_SECRET_KEY"] = os.getenv("SECRET_KEY_JWT")

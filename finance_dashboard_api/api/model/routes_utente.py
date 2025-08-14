@@ -15,15 +15,14 @@ from injector import inject
 from finance_dashboard_api.services.api.api_utenti_service import APIUtentiService
 from finance_dashboard_api.services.dao.dao_utente_service import DAOUtenteService
 from finance_dashboard_api.services.database_service import DatabaseService
+import os
+
 
 api_utente_blueprint = Blueprint("api_utente_blueprint", __name__)
 CORS(
     api_utente_blueprint,
     supports_credentials=True,
-    origins=[
-        "http://localhost:5173",
-        "https://black-rock-0b9c0dd10.1.azurestaticapps.net/",
-    ],
+    origins=[os.getenv("FE_URL")],
 )
 
 logger = logging.getLogger(__name__)
