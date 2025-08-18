@@ -34,7 +34,14 @@ db_service = DatabaseService()
 def me():
     current_user_id = get_jwt_identity()
     current_username = get_jwt().get("username")
-    return jsonify({"id": current_user_id, "username": current_username})
+    nome_completo = get_jwt().get("nome_completo")
+    return jsonify(
+        {
+            "id": current_user_id,
+            "username": current_username,
+            "nome_completo": nome_completo,
+        }
+    )
 
 
 @inject

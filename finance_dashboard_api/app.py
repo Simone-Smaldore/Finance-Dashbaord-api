@@ -72,7 +72,7 @@ def main() -> None:
     register_errors(app)
     logger.debug("Starting application")
     FlaskInjector(app=app, modules=[configure_injection])
-    app.run(host="127.0.0.1", port=8088)
+    app.run(host="127.0.0.1", port=8088, debug=True)
 
 
 def configure_injection(binder: Binder) -> None:

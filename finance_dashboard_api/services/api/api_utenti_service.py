@@ -20,7 +20,11 @@ class APIUtentiService:
         if utente is None:
             return {"error": "Credenziali errate"}, None, 401
         access_token = create_access_token(
-            identity=str(utente.id), additional_claims={"username": utente.username}
+            identity=str(utente.id),
+            additional_claims={
+                "username": utente.username,
+                "nome_completo": utente.nome + " " + utente.cognome,
+            },
         )
         response = {"message": "Login successful"}
         return response, access_token, 200
