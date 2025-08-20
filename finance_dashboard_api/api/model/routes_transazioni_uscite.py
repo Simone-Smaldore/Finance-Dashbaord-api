@@ -11,12 +11,16 @@ from finance_dashboard_api.services.dao.dao_transazioni_uscite_service import (
     DAOTransazioniService,
 )
 from finance_dashboard_api.services.database_service import DatabaseService
-
+import os
 
 api_transazioni_uscite_blueprint = Blueprint(
     "api_transazioni_uscite_blueprint", __name__
 )
-CORS(api_transazioni_uscite_blueprint)
+CORS(
+    api_transazioni_uscite_blueprint,
+    supports_credentials=True,
+    origins=[os.getenv("FE_URL")],
+)
 
 logger = logging.getLogger(__name__)
 
