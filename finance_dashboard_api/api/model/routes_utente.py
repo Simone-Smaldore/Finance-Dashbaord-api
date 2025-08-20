@@ -47,14 +47,14 @@ def me():
 @inject
 @api_utente_blueprint.route("/login", methods=["POST"])
 def login(api_utenti_service: APIUtentiService):
-    session = db_service.get_session()
-    dao_utente_service = DAOUtenteService(session)
-    data = request.get_json()
-    message, access_token, code = (
-        api_utenti_service.get_utente_by_username_and_password(
-            data=data, dao_utente_service=dao_utente_service
+    with db_service.get_session() as session:
+        dao_utente_service = DAOUtenteService(session)
+        data = request.get_json()
+        message, access_token, code = (
+            api_utenti_service.get_utente_by_username_and_password(
+                data=data, dao_utente_service=dao_utente_service
+            )
         )
-    )
     response = jsonify(message)
     if access_token is not None:
         set_access_cookies(response, access_token)

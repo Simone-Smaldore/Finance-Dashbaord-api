@@ -35,11 +35,11 @@ def get_transazioni(
     db_service: DatabaseService,
     api_transazioni_uscite_service: APITransazioniUsciteService,
 ):
-    session = db_service.get_session()
-    dao_transazioni_service = DAOTransazioniService(session)
-    result = api_transazioni_uscite_service.get_transazioni_uscite(
-        dao_transazioni_service
-    )
+    with db_service.get_session() as session:
+        dao_transazioni_service = DAOTransazioniService(session)
+        result = api_transazioni_uscite_service.get_transazioni_uscite(
+            dao_transazioni_service
+        )
     return jsonify(result)
 
 
@@ -50,13 +50,12 @@ def create_transazione(
     db_service: DatabaseService,
     api_transazioni_uscite_service: APITransazioniUsciteService,
 ):
-    session = db_service.get_session()
-    dao_transazioni_service = DAOTransazioniService(session)
-    data = request.get_json()
-    result, code = api_transazioni_uscite_service.create_transaction(
-        data, dao_transazioni_service
-    )
-
+    with db_service.get_session() as session:
+        dao_transazioni_service = DAOTransazioniService(session)
+        data = request.get_json()
+        result, code = api_transazioni_uscite_service.create_transaction(
+            data, dao_transazioni_service
+        )
     return (
         jsonify(result),
         code,
