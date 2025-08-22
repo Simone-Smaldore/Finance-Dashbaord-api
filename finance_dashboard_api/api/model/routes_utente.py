@@ -35,11 +35,13 @@ def me():
     current_user_id = get_jwt_identity()
     current_username = get_jwt().get("username")
     nome_completo = get_jwt().get("nome_completo")
+    csrf_token = get_jwt()["csrf"]
     return jsonify(
         {
             "id": current_user_id,
             "username": current_username,
             "nome_completo": nome_completo,
+            "csrf_access_token": csrf_token,
         }
     )
 
