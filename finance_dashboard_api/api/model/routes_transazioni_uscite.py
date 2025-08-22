@@ -60,3 +60,22 @@ def create_transazione(
         jsonify(result),
         code,
     )
+
+
+@inject
+@api_transazioni_uscite_blueprint.route(
+    "/transazioni_uscite/<int:transazione_id>", methods=["DELETE"]
+)
+@jwt_required()
+def delete_transazione(
+    transazione_id: int,
+    db_service: DatabaseService,
+    api_transazioni_uscite_service: APITransazioniUsciteService,
+):
+    print("Inside delete")
+    with db_service.get_session() as session:
+        dao_transazioni_service = DAOTransazioniService(session)
+        success, code = api_transazioni_uscite_service.delete_transaction(
+            transazione_id, dao_transazioni_service
+        )
+    return jsonify(success), code

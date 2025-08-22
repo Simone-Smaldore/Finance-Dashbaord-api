@@ -76,3 +76,17 @@ class APITransazioniUsciteService:
             ),
             201,
         )
+
+    def delete_transaction(
+        self,
+        transazione_id: int,
+        dao_transazioni_service: DAOTransazioniService,
+    ) -> tuple[dict, int]:
+        transazione = dao_transazioni_service.get_by_id(transazione_id)
+
+        if not transazione:
+            return {"error": "Transazione non trovata"}, 404
+        if transazione.id_utente != int(get_jwt_identity()):
+            return {"error": "Non autorizzato"}, 403
+        dao_transazioni_service.delete(transazione_id)
+        return {"message": "Transazione eliminata con successo"}, 200
