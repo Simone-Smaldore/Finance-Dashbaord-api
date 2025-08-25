@@ -72,10 +72,28 @@ def delete_transazione(
     db_service: DatabaseService,
     api_transazioni_uscite_service: APITransazioniUsciteService,
 ):
-    print("Inside delete")
     with db_service.get_session() as session:
         dao_transazioni_service = DAOTransazioniService(session)
         success, code = api_transazioni_uscite_service.delete_transaction(
             transazione_id, dao_transazioni_service
         )
     return jsonify(success), code
+
+
+@inject
+@api_transazioni_uscite_blueprint.route(
+    "/transazioni_uscite/<int:transazione_id>", methods=["PUT"]
+)
+@jwt_required()
+def update_transazione(
+    transazione_id: int,
+    db_service: DatabaseService,
+    api_transazioni_uscite_service: APITransazioniUsciteService,
+):
+    with db_service.get_session() as session:
+        dao_transazioni_service = DAOTransazioniService(session)
+        data = request.get_json()
+        result, code = api_transazioni_uscite_service.update_transaction(
+            transazione_id, data, dao_transazioni_service
+        )
+    return jsonify(result), code

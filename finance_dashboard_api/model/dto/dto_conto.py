@@ -12,6 +12,6 @@ class DTOConto:
     def to_dict(self) -> dict:
         return {
             "id": self.id,
-            "created_at": self.created_at.isoformat() if self.created_at else None,
+            "created_at": self.created_at,
             "descrizione": self.descrizione,
         }

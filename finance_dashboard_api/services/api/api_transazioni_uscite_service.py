@@ -52,8 +52,9 @@ class APITransazioniUsciteService:
             return {"error": "Missing fields in transazione"}, 400
 
         # Convertiamo la data da string ISO8601 a datetime
-        data_riferimento = datetime.fromisoformat(t_data["data_riferimento"])
-
+        data_riferimento = datetime.fromisoformat(
+            t_data["data_riferimento"].replace("Z", "+00:00")
+        ).date()
         # Creiamo la transazione
         transazione = dao_transazioni_service.create(
             descrizione=t_data["descrizione"],
@@ -90,3 +91,39 @@ class APITransazioniUsciteService:
             return {"error": "Non autorizzato"}, 403
         dao_transazioni_service.delete(transazione_id)
         return {"message": "Transazione eliminata con successo"}, 200
+
+    def update_transaction(
+        self,
+        transazione_id: int,
+        data: dict,
+        dao_transazioni_service: DAOTransazioniService,
+    ) -> Tuple[Union[DTOTransazioniUscite, dict], int]:
+        transazione = dao_transazioni_service.get_by_id(transazione_id)
+        print(transazione)
+        if not transazione:
+            return {"error": "Transazione non trovata"}, 404
+        if transazione.id_utente != int(get_jwt_identity()):
+            return {"error": "Non autorizzato"}, 403
+
+        t_data = data.get("transazione", {})
+        print(t_data)
+        # Converto la data se presente
+        # if "data_riferimento" in t_data and t_data["data_riferimento"]:
+        #     t_data["data_riferimento"] = datetime.fromisoformat(
+        #         t_data["data_riferimento"]
+        #     )
+
+        transazione = dao_transazioni_service.update(transazione_id, **t_data)
+
+        return (
+            DTOTransazioniUscite(
+                id=transazione.id,
+                descrizione=transazione.descrizione,
+                importo=transazione.importo,
+                data_riferimento=transazione.data_riferimento,
+                id_utente=transazione.id_utente,
+                id_conto=transazione.id_conto,
+                tipologia_spesa=transazione.tipologia_spesa,
+            ),
+            200,
+        )
