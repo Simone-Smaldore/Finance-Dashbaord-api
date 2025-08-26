@@ -1,4 +1,8 @@
 from flask_jwt_extended import get_jwt_identity
+from pydantic import ValidationError
+from finance_dashboard_api.api.validators.transazione_validator import (
+    TransazioneUscitaValidator,
+)
 from finance_dashboard_api.model.dto.dto_transazioni_uscite import DTOTransazioniUscite
 from finance_dashboard_api.services.dao.dao_transazioni_uscite_service import (
     DAOTransazioniService,
@@ -55,13 +59,24 @@ class APITransazioniUsciteService:
         data_riferimento = datetime.fromisoformat(
             t_data["data_riferimento"].replace("Z", "+00:00")
         ).date()
+
+        try:
+            t_data["id_utente"] = id_utente
+            t_data["id_conto"] = id_conto
+            valid_data = self._validate_transazione_data(t_data)
+        except ValidationError as e:
+            messaggi = [
+                f"{'.'.join(map(str, err['loc']))}: {err['msg']}" for err in e.errors()
+            ]
+            return {"errors": messaggi}, 400
+
         # Creiamo la transazione
         transazione = dao_transazioni_service.create(
-            descrizione=t_data["descrizione"],
-            importo=t_data["importo"],
-            id_utente=id_utente,
-            id_conto=id_conto,
-            tipologia_spesa=t_data["tipologia_spesa"],
+            descrizione=valid_data["descrizione"],
+            importo=valid_data["importo"],
+            id_utente=valid_data["id_utente"],
+            id_conto=valid_data["id_conto"],
+            tipologia_spesa=valid_data["tipologia_spesa"],
             data_riferimento=data_riferimento,
         )
 
@@ -99,14 +114,21 @@ class APITransazioniUsciteService:
         dao_transazioni_service: DAOTransazioniService,
     ) -> Tuple[Union[DTOTransazioniUscite, dict], int]:
         transazione = dao_transazioni_service.get_by_id(transazione_id)
-        print(transazione)
         if not transazione:
             return {"error": "Transazione non trovata"}, 404
         if transazione.id_utente != int(get_jwt_identity()):
             return {"error": "Non autorizzato"}, 403
 
         t_data = data.get("transazione", {})
-        print(t_data)
+
+        try:
+            valid_data = self._validate_transazione_data(t_data)
+        except ValidationError as e:
+            messaggi = [
+                f"{'.'.join(map(str, err['loc']))}: {err['msg']}" for err in e.errors()
+            ]
+            return {"errors": messaggi}, 400
+
         # Converto la data se presente
         # if "data_riferimento" in t_data and t_data["data_riferimento"]:
         #     t_data["data_riferimento"] = datetime.fromisoformat(
@@ -127,3 +149,13 @@ class APITransazioniUsciteService:
             ),
             200,
         )
+
+    def _validate_transazione_data(self, data: dict) -> dict:
+        """
+        Valida i dati della transazione.
+        Ritorna un dict valido oppure solleva ValidationError.
+        """
+        try:
+            return TransazioneUscitaValidator(**data).model_dump()
+        except ValidationError as e:
+            raise e
