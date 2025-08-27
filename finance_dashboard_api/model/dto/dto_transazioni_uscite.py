@@ -12,6 +12,7 @@ class DTOTransazioniUscite:
     id_utente: int
     id_conto: int
     tipologia_spesa: Optional[str]
+    tipo_transazione: Optional[str]
 
     def to_dict(self):
         return {
@@ -22,4 +23,5 @@ class DTOTransazioniUscite:
             "id_utente": self.id_utente,
             "id_conto": self.id_conto,
             "tipologia_spesa": self.tipologia_spesa,
+            "tipo_transazione": self.tipo_transazione,
         }

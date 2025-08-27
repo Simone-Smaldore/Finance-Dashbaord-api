@@ -29,6 +29,7 @@ class APITransazioniUsciteService:
                 id_utente=t.id_utente,
                 id_conto=t.id_conto,
                 tipologia_spesa=t.tipologia_spesa,
+                tipo_transazione=t.tipo_transazione,
             )
             for t in transazioni
         ]
@@ -51,6 +52,7 @@ class APITransazioniUsciteService:
             "importo",
             "tipologia_spesa",
             "data_riferimento",
+            "tipo_transazione",
         ]
         if not all(f in t_data for f in required_trans_fields):
             return {"error": "Missing fields in transazione"}, 400
@@ -76,6 +78,7 @@ class APITransazioniUsciteService:
             importo=valid_data["importo"],
             id_utente=valid_data["id_utente"],
             id_conto=valid_data["id_conto"],
+            tipo_transazione=valid_data["tipo_transazione"],
             tipologia_spesa=valid_data["tipologia_spesa"],
             data_riferimento=data_riferimento,
         )
@@ -89,6 +92,7 @@ class APITransazioniUsciteService:
                 id_utente=transazione.id_utente,
                 id_conto=transazione.id_conto,
                 tipologia_spesa=transazione.tipologia_spesa,
+                tipo_transazione=transazione.tipo_transazione,
             ),
             201,
         )
@@ -146,6 +150,7 @@ class APITransazioniUsciteService:
                 id_utente=transazione.id_utente,
                 id_conto=transazione.id_conto,
                 tipologia_spesa=transazione.tipologia_spesa,
+                tipo_transazione=transazione.tipo_transazione,
             ),
             200,
         )

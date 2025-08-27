@@ -22,14 +22,16 @@ class DAOTransazioniService:
         importo: float,
         id_utente: int,
         id_conto: int,
-        tipologia_spesa: str = None,
-        data_riferimento: datetime = None,
+        tipo_transazione: str,
+        tipologia_spesa: str,
+        data_riferimento: datetime,
     ):
         nuova_transazione = TransazioniUscite(
             descrizione=descrizione,
             importo=importo,
             id_utente=id_utente,
             id_conto=id_conto,
+            tipo_transazione=tipo_transazione,
             tipologia_spesa=tipologia_spesa,
             data_riferimento=data_riferimento,
         )

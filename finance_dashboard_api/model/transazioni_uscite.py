@@ -19,3 +19,4 @@ class TransazioniUscite(Base):
     id_utente = Column(BigInteger, ForeignKey("utente.id"), nullable=False)
     id_conto = Column(BigInteger, ForeignKey("conto.id"), nullable=False)
     tipologia_spesa = Column(Text)
+    tipo_transazione = Column(Text)
